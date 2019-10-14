@@ -1,5 +1,13 @@
 # 腾讯智图 webpack loader
 
+## ImageMagick
+
+```node
+需先安装
+https://imagemagick.org/script/download.php
+```
+
+## 配置
 ```node
 npm i zhitu-loader -D
 
