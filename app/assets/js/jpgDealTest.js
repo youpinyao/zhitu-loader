@@ -1,3 +1,6 @@
+function consolelog() {
+
+}
 async.series([/*只有上一个函数调用了callback，下一个函数才会继续被触发执行*/
     function(callback){
         e.imgConvert(tempPath,tempPng,qua,function(){/*生成临时png,jpg文件*/
@@ -32,7 +35,7 @@ async.series([/*只有上一个函数调用了callback，下一个函数才会�
         fs.unlink(tempJpg);
         e.newsize=fs.statSync(desPath).size;
         if(isWebp){
-            console.log('正在生成webp图片！');
+            consolelog('正在生成webp图片！');
             e.to_webp(buff,desPath,webpDir,function(){
                 if(cb){
                     cb(info);

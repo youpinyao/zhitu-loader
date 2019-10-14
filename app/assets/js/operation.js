@@ -4,7 +4,9 @@
  * @update 2016/3/15
  * usage:
  */
+function consolelog() {
 
+}
 // F5刷新
 $(document).bind('keyup',function(e){
     if(e.keyCode === 116) {
@@ -44,7 +46,7 @@ $('.qa-link').click(function () {//打开网站
     shell.openExternal('http://zhitu.isux.us/index.php/preview/install');
 });
 $('.end-log-box').on('click', '#open-dir', function () {//打开压缩后的文件夹目录
-    console.log('我出发了');
+    consolelog('我出发了');
     shell.showItemInFolder(desDir);
 });
 /*逻辑功能处理*/
@@ -58,7 +60,7 @@ $('#item-chkwebP.setting-item').click(function () {
         isWebp = true;
     }
     window.localStorage.setItem('isWebP', isWebp);
-    console.log('是否生成webp:' + window.localStorage.getItem('isWebP'));
+    consolelog('是否生成webp:' + window.localStorage.getItem('isWebP'));
 });
 $('#chkwebP').change(function () {
     if ($(this).attr('checked') == undefined) {
@@ -69,7 +71,7 @@ $('#chkwebP').change(function () {
         }
     }
     window.localStorage.setItem('isWebP', isWebp);
-    console.log('是否生成webp:' + window.localStorage.getItem('isWebP'));
+    consolelog('是否生成webp:' + window.localStorage.getItem('isWebP'));
 });
 /*初始化点是否展示log*/
 $('#item-isTypeChange.setting-item').click(function () {
@@ -81,7 +83,7 @@ $('#item-isTypeChange.setting-item').click(function () {
         isTypeChange = true;
     }
     window.localStorage.setItem('isTypeChange', isTypeChange);
-    console.log('isTypeChange:' + window.localStorage.getItem('isTypeChange'));
+    consolelog('isTypeChange:' + window.localStorage.getItem('isTypeChange'));
 });
 $('#isTypeChange').change(function () {
     if ($(this).attr('checked') == undefined) {
@@ -92,7 +94,7 @@ $('#isTypeChange').change(function () {
         }
     }
     window.localStorage.setItem('isTypeChange', isTypeChange);
-    console.log('isTypeChange:' + window.localStorage.getItem('isTypeChange'));
+    consolelog('isTypeChange:' + window.localStorage.getItem('isTypeChange'));
 });
 $('#item-replaceFile.setting-item').click(function () {
     if($('#replaceFile').attr("checked")=='checked'){
@@ -103,7 +105,7 @@ $('#item-replaceFile.setting-item').click(function () {
         replaceFile = true;
     }
     window.localStorage.setItem('replaceFile', replaceFile);
-    console.log('是否替换原图:' + window.localStorage.getItem('replaceFile'));
+    consolelog('是否替换原图:' + window.localStorage.getItem('replaceFile'));
 });
 /*初始化点是否替换原图*/
 $('#replaceFile').change(function () {
@@ -115,7 +117,7 @@ $('#replaceFile').change(function () {
         }
     }
     window.localStorage.setItem('replaceFile', replaceFile);
-    console.log('是否替换原图:' + window.localStorage.getItem('replaceFile'));
+    consolelog('是否替换原图:' + window.localStorage.getItem('replaceFile'));
 });
 $('#item-isResize.setting-item').click(function () {
     if($('#isResize').attr("checked")=='checked'){
@@ -128,7 +130,7 @@ $('#item-isResize.setting-item').click(function () {
         $('.input-resize').show(150);
     }
     window.localStorage.setItem('isResize', isResize);
-    console.log('是否裁剪:' + window.localStorage.getItem('isResize'));
+    consolelog('是否裁剪:' + window.localStorage.getItem('isResize'));
 });
 /*初始化点是否替换原图*/
 $('#isResize').change(function () {
@@ -142,7 +144,7 @@ $('#isResize').change(function () {
         }
     }
     window.localStorage.setItem('isResize', isResize);
-    console.log('是否裁剪:' + window.localStorage.getItem('isResize'));
+    consolelog('是否裁剪:' + window.localStorage.getItem('isResize'));
 });
 /*初始化点击选择文件上传*/
 $('.btn-file-select,.upload-area').click(function (event) {

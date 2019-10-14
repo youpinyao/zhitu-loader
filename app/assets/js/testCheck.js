@@ -4,7 +4,9 @@
  * @update 2016/6/14
  * usage:
  */
+function consolelog() {
 
+}
  var cp = require('child_process');
  var fs = require('fs');
  var binDir = 'opt/ImageMagick/bin/';
@@ -22,7 +24,7 @@
         shell_code += pkg_path;
         cp.exec(shell_code , function(error, stdout, stderr) {
             if (error !== null) {
-              console.log('exec error: ' + error);
+              consolelog('exec error: ' + error);
             }else{
 
             }

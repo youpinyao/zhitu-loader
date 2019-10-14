@@ -17,7 +17,7 @@ var jpegquality = require('jpegquality');/*获取jpg质量*/
  var hasAlpha = require('png-has-alpha');
 
  var buf = fs.readFileSync(that.path);
- console.log('是否带了alpha: %s', hasAlpha(buf) ? 'yes' : 'no');
+ consolelog('是否带了alpha: %s', hasAlpha(buf) ? 'yes' : 'no');
 
  */
 
@@ -39,7 +39,9 @@ var gulpRename = require("gulp-rename");
 //var imageminGifsicle = require('imagemin-gifsicle');
 var imageminWebp = require('imagemin-webp');
 
+function consolelog() {
 
+}
 module.exports = Img;
 function Img(path,imgID,buff){
     var id=imgID ? imgID : 0;/*透传一个id进来，实在没办法，为了获取到发生error文件的那一行log*/
@@ -102,11 +104,11 @@ function Img(path,imgID,buff){
 
         /*先检查文件是否符合要求*/
         //if(imageinfo(fs.readFileSync(src))){
-        console.log(imageinfo(buff).mimeType);
+        consolelog(imageinfo(buff).mimeType);
         if(imageinfo(buff)){
             that.realExtname=(imageinfo(buff).format).toLocaleLowerCase().replace(/jpeg/,'jpg');/*真实格式,类似png,jpeg*/
         }else{
-            console.log('文件' + src + '发生错误');
+            consolelog('文件' + src + '发生错误');
             var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
             //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
             var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-01，请检查文件类型！</span><i class="img-ico"></i>';
@@ -124,8 +126,8 @@ function Img(path,imgID,buff){
         /*获取图片信息和图片颜色值*/
         im.identify(src, function (err, features){
             if (err){
-                console.log(err);
-                console.log('文件' + src + '发生错误');
+                consolelog(err);
+                consolelog('文件' + src + '发生错误');
 //                errorTips('文件发生错误，请检查文件类型');
                 var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                 //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
@@ -142,7 +144,7 @@ function Img(path,imgID,buff){
             }else{
                 im.identify(['-format', '%k', src], function(err, colorNum){
                     if (err) {
-                        console.log('文件' + src + '发生错误');
+                        consolelog('文件' + src + '发生错误');
 //                        errorTips('文件发生错误，请检查文件类型');
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
@@ -186,7 +188,7 @@ function Img(path,imgID,buff){
         /*重置暴露属性*/
         that.path=src;
         that.size=fs.statSync(that.path).size;
-//        console.log('file size:' + that.size);
+//        consolelog('file size:' + that.size);
         that.newsize=0;
         that.width=info.width;
         that.height=info.height;
@@ -207,7 +209,7 @@ function Img(path,imgID,buff){
                     }
                 }
                 catch(e){
-                    console.log(e);
+                    consolelog(e);
                     return 0
                 }
             }else{
@@ -221,19 +223,19 @@ function Img(path,imgID,buff){
         // payload.dominant是主色，RGB形式表示
         // payload.secondary是次色，RGB形式表示
         // payload.palette是调色板，含多个主要颜色，数组
-//                console.log(payload.dominant);
-//                console.log(payload.secondary);
-//                console.log(payload.palette);
-//                console.log(payload.palette.length);
+//                consolelog(payload.dominant);
+//                consolelog(payload.secondary);
+//                consolelog(payload.palette);
+//                consolelog(payload.palette.length);
 //            }
 //        });
 
-        console.log('颜色数量：'+color_num);
+        consolelog('颜色数量：'+color_num);
         //if(imageinfo(fs.readFileSync(that.path))){
         if(imageinfo(buff)){
             that.realExtname=(imageinfo(buff).format).toLocaleLowerCase().replace(/jpeg/,'jpg');/*真实格式,类似png,jpeg*/
         }else{
-            console.log('文件' + src + '发生错误');
+            consolelog('文件' + src + '发生错误');
 //            errorTips('文件"'+that.basename+'"发生错误，请检查文件类型或内容');
             var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
             //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
@@ -282,7 +284,7 @@ function Img(path,imgID,buff){
 
         that.is_png8=function(){
             if(that.realExtname=='png'||that.realExtname=='PNG'){
-                console.log(info.type);
+                consolelog(info.type);
                 if(info.type && info.type=='Palette') return true;
                 else return false;
             }else{
@@ -308,7 +310,7 @@ function Img(path,imgID,buff){
             }
             var myCrusher = new pngcrush(['-rem','alla','-reduce']);
             myCrusher.on('error',function(err){
-                console.log(err);
+                consolelog(err);
                 var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                 var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-05，请检查文件类型或重新单独上传！</span><i class="img-ico"></i>';
                 $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
@@ -346,7 +348,7 @@ function Img(path,imgID,buff){
             /*80-85*/
             var myQuant=new pngquant([256, '--ordered','-s1','--quality='+min+'-'+max,'--floyd=1']);
             myQuant.on('error',function(err){
-                console.log(err);
+                consolelog(err);
                 //var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                 //var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-06，PNG有损压缩出错！</span><i class="img-ico"></i>';
                 //$('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
@@ -392,7 +394,7 @@ function Img(path,imgID,buff){
                 //.use(Imagemin.gifsicle({interlaced: true}))
                 .run(function (err, data) {
                     if(err){
-                        console.log(err);
+                        consolelog(err);
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-07，请检查文件类型！</span><i class="img-ico"></i>';
@@ -423,7 +425,7 @@ function Img(path,imgID,buff){
                 .use(Imagemin.gifsicle({interlaced: true}))
                 .run(function (err, data) {
                     if(err){
-                        console.log(err);
+                        consolelog(err);
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-08，请检查文件类型！</span><i class="img-ico"></i>';
@@ -453,7 +455,7 @@ function Img(path,imgID,buff){
                 .use(imageminWebp({quality: 80}))
                 .run(function (err, data) {
                     if(err){
-                        console.log(err);
+                        consolelog(err);
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-09，请检查文件类型！</span><i class="img-ico"></i>';
@@ -479,7 +481,7 @@ function Img(path,imgID,buff){
             im.convert([src, '-quality', quality, des],
                 function(err, stdout){
                     if (err) {
-                        console.log(err);
+                        consolelog(err);
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-10，请检查文件类型！</span><i class="img-ico"></i>';
@@ -501,7 +503,7 @@ function Img(path,imgID,buff){
             im.convert([src, des],
                 function(err, stdout){
                     if (err) {
-                        console.log(err);
+                        consolelog(err);
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-11，转换格式失败！</span><i class="img-ico"></i>';
@@ -524,7 +526,7 @@ function Img(path,imgID,buff){
             im.convert([src, '-colors', 256, des],
                 function(err, stdout){
                     if (err) {
-                        console.log(err);
+                        consolelog(err);
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-12，请检查文件类型！</span><i class="img-ico"></i>';
@@ -554,7 +556,7 @@ function Img(path,imgID,buff){
             }, function(err, stdout, stderr){
                 if (err) throw err;
                 if(cb) cb();
-                console.log('resized kittens.jpg to fit within 256x256px');
+                consolelog('resized kittens.jpg to fit within 256x256px');
             });
         };
 
@@ -571,7 +573,7 @@ function Img(path,imgID,buff){
             }, function(err, stdout, stderr){
                 if (err) throw err;
                 if(cb) cb();
-                console.log('crop kittens.jpg to fit within 256x256px');
+                consolelog('crop kittens.jpg to fit within 256x256px');
             });
         };
 

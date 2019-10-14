@@ -17,7 +17,9 @@ function makeDir(path){
         fs.mkdirSync(path, 0777);/*存储目录不存在则创建*/
     }
 }
+function consolelog() {
 
+}
 
 /*判断图片类型是否可用*/
 module.exports.contains = contains;
@@ -66,7 +68,7 @@ function searchDir(dir, callback) {
                             if (!--pending) callback(null, results);
                         });
                     }else{
-                        console.log('过滤了非法目录 ' + file);
+                        consolelog('过滤了非法目录 ' + file);
                         var txt='<p class="tips info ignore">过滤了非法目录 '+file+'</p>';
                         $('.log-box').append(txt);
                         if (!--pending) callback(null, results);
@@ -121,12 +123,12 @@ function openFolderByFiles(){
                         });
                     }
                     fileCount=fileArray.length;
-                    console.log('图片处理中！');
+                    consolelog('图片处理中！');
                     dealCount=fileCount;
                     file_deal();
                 }
             }else{
-                console.log('当前有图片正在处理，请稍后！');
+                consolelog('当前有图片正在处理，请稍后！');
             }
         }
     })
@@ -153,21 +155,21 @@ function openFolderByDir(){
                 if(fileNames) {
                     searchDir(fileNames[0], function(err, results) {
                         if (err){
-                            console.log(err);
+                            consolelog(err);
                             return false;
                         }else{
                             fileArray=results;
                             fileCount=fileArray.length;
 
-                            console.log('图片处理中！');
-                            console.log(fileArray);
+                            consolelog('图片处理中！');
+                            consolelog(fileArray);
                             dealCount=fileCount;
                             file_deal();
                         }
                     });
                 }
             }else{
-                console.log('当前有图片正在处理，请稍后！');
+                consolelog('当前有图片正在处理，请稍后！');
             }
         }
     })
@@ -203,7 +205,7 @@ function overDone(){
             deleteFolderRecursive(tempDirArray[i]);
         }
     }catch (e){
-        console.log(e);
+        consolelog(e);
         $('.end-log-box').prepend('<p class="tips info">警告：删除临时目录！(可忽略)</p>');
     }
     $('.end-log-box').prepend('<p class="tips done">此批文件处理完毕！</p>');
@@ -219,7 +221,7 @@ function overDone(){
 function getDomain(callback){
     exec('ifconfig -a',{encoding: 'utf8'},function (error, stdout, stderr) {
         if(error){
-            console.log(error);
+            consolelog(error);
             return;
         }
         var lines_detail=[];
@@ -231,7 +233,7 @@ function getDomain(callback){
                 domain=lines[i+1].split(' ').pop().replace(/(^s*)|(s*$)/g, "").replace(/[\r\n]/g,"");
             }
         }
-        console.log(lines_detail);
+        consolelog(lines_detail);
         if(callback) callback();
     });
 }
@@ -256,11 +258,11 @@ function setAjax(o){
                     data: 'Unknown error occurred: [' + request.responseText + ']'
                 };
             }
-            console.log(resp);
+            consolelog(resp);
         }
     };
-    request.addEventListener("error", function(){console.log("error")}, false);
-    request.addEventListener("abort", function(){console.log("abort")}, false);
+    request.addEventListener("error", function(){consolelog("error")}, false);
+    request.addEventListener("abort", function(){consolelog("abort")}, false);
     request.open('POST', urlStr);
     request.send(data);
 }

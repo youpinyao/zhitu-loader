@@ -4,7 +4,9 @@
  * @update 2016/6/14
  * usage:
  */
+function consolelog() {
 
+}
 var config = require("./package.json");
 
 var version = config.version;
@@ -17,7 +19,7 @@ function checkVersion(src, cb){
         var request = new XMLHttpRequest();
         request.onreadystatechange = function(){
             if(request.readyState == 4 && request.status==200){
-                console.log(request);
+                consolelog(request);
                 var resp = '';
                 resp =  request.responseText;
                 if(cb){
@@ -25,15 +27,15 @@ function checkVersion(src, cb){
                 }
             }
         };
-        request.addEventListener("error", function(){console.log("error")}, false);
-        request.addEventListener("abort", function(){console.log("abort")}, false);
+        request.addEventListener("error", function(){consolelog("error")}, false);
+        request.addEventListener("abort", function(){consolelog("abort")}, false);
         request.open('POST', urlStr);
         request.send(data);
 }
 
 checkVersion('http://zhitu.isux.us/index.php/preview/version', function(v){
     if(v === version){
-        console.log('没有新版本');
+        consolelog('没有新版本');
         $('.version-tips, #contact-us').removeClass('show');
     }else{
         if(v.length > 15 || v == ''){
@@ -41,7 +43,7 @@ checkVersion('http://zhitu.isux.us/index.php/preview/version', function(v){
         }
         hasNewVersion = true;
         $('.version-tips, #contact-us').addClass('show');
-        console.log('有新版本');
+        consolelog('有新版本');
     }
 });
 

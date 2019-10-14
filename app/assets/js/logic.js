@@ -41,7 +41,9 @@ var isWebp = true;
 var legalImgType = ["png", "jpg", "gif", "bmp", "webp"];
 var isResize = false;
 var replaceFile = false;
+function consolelog() {
 
+}
 /*数组的深度拷贝*/
 function getType(o){
     var _t;
@@ -75,9 +77,9 @@ var qualitySelect = {/*质量选择,每次在默认质量上减少，比如选q1
 //     $('.quality-box .quality-btn').removeClass('active');
 //     $(this).addClass('active');
 //     qualityNum = qualitySelect[$(this).attr('id')];
-//     console.log(qualityNum);
+//     consolelog(qualityNum);
 //     if(isDeal || lastFileArray.length == 0) {
-//         console.log('请先上传文件！');
+//         consolelog('请先上传文件！');
 //         // alert('请先上传文件！');
 //         // return false;
 //     }else{
@@ -95,7 +97,7 @@ function file_add(info,file) {
     };
     fileArray.push(fileItem);
     if(fileArray.length==fileCount) {/*所有图片读取完之后才开始处理*/
-        console.log('图片处理中！');
+        consolelog('图片处理中！');
         file_deal();
     }
 }
@@ -118,8 +120,8 @@ function file_deal(last,quality){
         rightDealFile = 0;
         beforeTime=new Date().getTime();
         isDeal = true;
-        console.log('now file array：');
-        console.log(fileArray);
+        consolelog('now file array：');
+        consolelog(fileArray);
         for(var x=0;x<fileCount;x++){
             $('.log-box').append('<p class="log-item active" id="item-'+x+'"><span class="img-name">'+path.basename(fileArray[x].path)+'</span><span class="img-info">（文件上传处理中 ...）</span><i class="img-ico"></i></p>');
             //$('.log-box').scrollTop((x+1)*41);
@@ -133,14 +135,14 @@ function file_deal(last,quality){
         (function(index){
             fs.readFile(fileArray[index].path,function(err,buff){/*这里每张图片文件都做异步处理*/
                 if(err){
-                    console.log(err);
+                    consolelog(err);
                     var txt='<p class="log-item error" id="item-'+fileArray[index].id+'"><span class="img-name">'+fileArray[index].name+'</span><span class="img-info">（读取出错-13，请检查文件类型！）</span><i class="img-ico"></i></p>';
                     //$('.log-box').append(txt);
                     if(!$('.log-box').find('#item-'+fileArray[index].id).hasClass('error')){/*如果不是error的话*/
                         $('.log-box').find('#item-'+fileArray[index].id).removeClass('active').addClass('error').html(txt);
                     }
                     if(buffArray.length==fileCount){
-                        console.log(buffArray);
+                        consolelog(buffArray);
                         buffArray.forEach(function(o){
                             each(o.fileInfo, o.buff);
                         })
@@ -194,7 +196,7 @@ function dealCountNum(){
         $('.end-log-box .processing-tips').remove();
         /*2016.12.27 add*/
         overDone();
-        console.log('此批图片已处理完毕');
+        consolelog('此批图片已处理完毕');
         if(afterSize>=beforeSize) afterSize=beforeSize;
         afterTime=new Date().getTime();
         $('.end-log-box').prepend('<p class="tips info all">处理<span class="success">'+rightDealFile+'</span>个文件，共压缩了：<span class="img-size success">'+(Math.ceil(beforeSize/1024)-Math.ceil(afterSize/1024))+'K</span>，压缩率：<span class="success">'+Math.ceil((beforeSize- afterSize)/beforeSize*100)+'%</span>，用时 <span class="success">'+((afterTime-beforeTime)/1000)+'s</span>       <a class="success" id="open-dir">查看文件</a></p>');
@@ -231,7 +233,7 @@ function each(info,buff, callback){
     if(tempDirArray.indexOf(tempDir_single) < 0){/*临时目录集合*/
         tempDirArray.push(tempDir_single);
     }
-    console.log(desDir_single, tempDir_single);
+    consolelog(desDir_single, tempDir_single);
 
     makeDir(desDir_single);
     if(isWebp) makeDir(webpDir_single);
@@ -258,12 +260,12 @@ function each(info,buff, callback){
                 d = function(){
                     switch (caseType) {/*e:源文件及对应信息接口，tempPath：临时文件（处理原型），desPath：最终保存的图片*/
                         case 'png':
-                            console.log(that.basename + '----png');
+                            consolelog(that.basename + '----png');
                             isDeal = true;
                             /*关闭开关*/
 //                        pngDeal(that, buff, tempPath, desPath, function (info) {
-//                            console.log(info.basename + ' done');
-//                            console.log(e.newsize);
+//                            consolelog(info.basename + ' done');
+//                            consolelog(e.newsize);
 //                            beforeSize+= e.size;
 //                            afterSize+= e.newsize;
 //                            //var txt='<p class="tips">文件<span class="img-name">'+info.basename+'.'+e.extname+'</span><span class="success">处理完毕！</span><span class="info">（压缩前：<span class="success">'+Math.ceil(e.size/1024)+'K</span><span class="vs">VS</span>压缩后：<span class="success">'+Math.ceil(e.newsize/1024)+'K</span>）</span></p>';
@@ -275,8 +277,8 @@ function each(info,buff, callback){
 //                            dealCountNum();
 //                        });
                             pngDeal_With_TypeChange(that, buff, tempPath, desPath, function (info) {
-                                console.log(info.basename + ' done');
-                                console.log(e.newsize);
+                                consolelog(info.basename + ' done');
+                                consolelog(e.newsize);
                                 // beforeSize += e.size;
                                 // afterSize += e.newsize;
                                 //var txt='<p class="tips">文件<span class="img-name">'+info.basename+'.'+e.extname+'</span><span class="success">处理完毕！</span><span class="info">（压缩前：<span class="success">'+Math.ceil(e.size/1024)+'K</span><span class="vs">VS</span>压缩后：<span class="success">'+Math.ceil(e.newsize/1024)+'K</span>）</span></p>';
@@ -296,12 +298,12 @@ function each(info,buff, callback){
                             });
                             break;
                         case 'jpg':
-                            console.log(that.basename + '----jpg');
+                            consolelog(that.basename + '----jpg');
                             isDeal = true;
                             /*关闭开关*/
 //                        jpgDeal(that, buff, tempPath, desPath, function (info) {
-//                            console.log(info.basename + ' done');
-//                            console.log(e.newsize);
+//                            consolelog(info.basename + ' done');
+//                            consolelog(e.newsize);
 //                            beforeSize+= e.size;
 //                            afterSize+= e.newsize;
 //                            //var txt='<p class="tips">文件<span class="img-name">'+info.basename+'.'+e.extname+'</span><span class="success">处理完毕！</span><span class="info">（压缩前：<span class="success">'+Math.ceil(e.size/1024)+'K</span><span class="vs">VS</span>压缩后：<span class="success">'+Math.ceil(e.newsize/1024)+'K</span>）</span></p>';
@@ -313,8 +315,8 @@ function each(info,buff, callback){
 //                            dealCountNum();
 //                        });
                             jpgDeal_With_TypeChange(that, buff, tempPath, desPath, function (info) {
-                                console.log(info.basename + ' done');
-                                console.log(e.newsize);
+                                consolelog(info.basename + ' done');
+                                consolelog(e.newsize);
                                 // beforeSize += e.size;
                                 // afterSize += e.newsize;
                                 //var txt='<p class="tips">文件<span class="img-name">'+info.basename+'.'+e.extname+'</span><span class="success">处理完毕！</span><span class="info">（压缩前：<span class="success">'+Math.ceil(e.size/1024)+'K</span><span class="vs">VS</span>压缩后：<span class="success">'+Math.ceil(e.newsize/1024)+'K</span>）</span></p>';
@@ -332,12 +334,12 @@ function each(info,buff, callback){
                             });
                             break;
                         case 'gif':
-                            console.log(that.basename + '----gif');
+                            consolelog(that.basename + '----gif');
                             isDeal = true;
                             /*关闭开关*/
                             gifDeal(that, buff, tempPath, desPath, function (info) {
-                                console.log(info.basename + ' done');
-                                console.log(e.newsize);
+                                consolelog(info.basename + ' done');
+                                consolelog(e.newsize);
                                 // beforeSize += e.size;
                                 // afterSize += e.newsize;
                                 //var txt='<p class="tips">文件<span class="img-name">'+info.basename+'.'+e.extname+'</span><span class="success">处理完毕！</span><span class="info">（压缩前：<span class="success">'+Math.ceil(e.size/1024)+'K</span><span class="vs">VS</span>压缩后：<span class="success">'+Math.ceil(e.newsize/1024)+'K</span>）</span></p>';
@@ -351,11 +353,11 @@ function each(info,buff, callback){
                             });
                             break;
                         case 'png8':
-                            console.log(that.basename + '----png8');
+                            consolelog(that.basename + '----png8');
                             isDeal = true;
                             /*关闭开关*/
                             png8Deal(that, buff, tempPath, desPath, function (info) {
-                                console.log(info.basename + ' done');
+                                consolelog(info.basename + ' done');
                                 // beforeSize += e.size;
                                 // afterSize += e.newsize;
                                 //var txt='<p class="tips">文件<span class="img-name">'+info.basename+'.'+e.extname+'</span><span class="success">处理完毕！</span><span class="info">（压缩前：<span class="success">'+Math.ceil(e.size/1024)+'K</span><span class="vs">VS</span>压缩后：<span class="success">'+Math.ceil(e.newsize/1024)+'K</span>）</span></p>';
@@ -371,7 +373,7 @@ function each(info,buff, callback){
                     }
                 };
                 if(isResize) {
-                    console.log('进行裁剪：');
+                    consolelog('进行裁剪：');
                     var w = $('#cut_w').attr('value');
                     var h = $('#cut_h').attr('value');
                     if(w == '' || parseInt(w) > e.width) w = e.width;
@@ -386,7 +388,7 @@ function each(info,buff, callback){
                         });
                     }
                 }else{
-                    console.log('不需要裁剪：');
+                    consolelog('不需要裁剪：');
                         d();
                 }
             });

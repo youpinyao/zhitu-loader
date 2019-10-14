@@ -26,7 +26,9 @@ var qualityNum = process.env.ZHITU_QUALITY || 0;
 var isTypeChange = process.env.ZHITU_TYPECHANGE || false;
 
 
+function consolelog() {
 
+}
  module.exports.pngDeal = pngDeal;
 function pngDeal(e,buff,tempPath,desPath,cb){
     var max=Math.floor(Math.random()*100000+1);
@@ -52,13 +54,13 @@ function pngDeal(e,buff,tempPath,desPath,cb){
                         e.png_crush(tempPath,tempPngCrush,function(){
                             copy(desSrc,desPath,function(){
                                 fs.unlink(tempPath, function(err) {
-                                  console.log(err);
+                                  consolelog(err);
                                 });
-//                                fs.unlink(tempPng, function(err) { console.log(err) });
-                                fs.unlink(tempPngCrush, function(err) { console.log(err) });
+//                                fs.unlink(tempPng, function(err) { consolelog(err) });
+                                fs.unlink(tempPngCrush, function(err) { consolelog(err) });
                                 e.newsize=fs.statSync(desPath).size;
                                 if(isWebp){
-                                    console.log('正在生成webp图片！');
+                                    consolelog('正在生成webp图片！');
                                     e.to_webp(buff,desPath,webpDir,function(){
                                         if(cb){
                                             cb(info);
@@ -86,20 +88,20 @@ function pngDeal(e,buff,tempPath,desPath,cb){
                         if(qua <= 0) qua = 10;
                         if(qua >=100) qua = 99;
                     }
-                    console.log('压缩质量1:'+qua);
+                    consolelog('压缩质量1:'+qua);
                     e.png_quant(tempPngCrush,tempPng,qua-1,qua,function(){/*压缩png*/
-                        console.log(2);
+                        consolelog(2);
                         tempPngSize=fs.statSync(tempPng).size;
                         if(tempPngSize < info.size){
                             desSrc=tempPng;
                         }
                         copy(desSrc,desPath,function(){
-                            fs.unlink(tempPath, function(err) { console.log(err) });
+                            fs.unlink(tempPath, function(err) { consolelog(err) });
                             e.newsize=fs.statSync(desPath).size;
-                            fs.unlink(tempPng, function(err) { console.log(err) });
-                            fs.unlink(tempPngCrush, function(err) { console.log(err) });
+                            fs.unlink(tempPng, function(err) { consolelog(err) });
+                            fs.unlink(tempPngCrush, function(err) { consolelog(err) });
                             if(isWebp){
-                                console.log('正在生成webp图片！');
+                                consolelog('正在生成webp图片！');
                                 e.to_webp(buff,desPath,webpDir,function(){
                                     if(cb){
                                         cb(info);
@@ -124,19 +126,19 @@ function pngDeal(e,buff,tempPath,desPath,cb){
                     if(qua2 <= 0) qua2 = 10;
                     if(qua2 >=100) qua2 = 99;
                 }
-                console.log('压缩质量3:'+qua2);
+                consolelog('压缩质量3:'+qua2);
                 e.png_quant(tempPngCrush,tempPng,qua2-1,qua2,function(){/*对比原图，压缩jpg，压缩png*/
                     tempPngSize=fs.statSync(tempPng).size;
                     if(tempPngSize < info.size){
                         desSrc=tempPng;
                     }
                     copy(desSrc,desPath,function(){
-                        fs.unlink(tempPath, function(err) { console.log(err) });
+                        fs.unlink(tempPath, function(err) { consolelog(err) });
                         e.newsize=fs.statSync(desPath).size;
-                        fs.unlink(tempPngCrush, function(err) { console.log(err) });
-                        fs.unlink(tempPng, function(err) { console.log(err) });
+                        fs.unlink(tempPngCrush, function(err) { consolelog(err) });
+                        fs.unlink(tempPng, function(err) { consolelog(err) });
                         if(isWebp){
-                            console.log('正在生成webp图片！');
+                            consolelog('正在生成webp图片！');
                             e.to_webp(buff,desPath,webpDir,function(){
                                 if(cb){
                                     cb(info);
@@ -205,16 +207,16 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                     if(qua_jpg <= 0) qua_jpg = 10;
                     if(qua_jpg >=100) qua_jpg = 99;
                 }
-                console.log('压缩质量jpg:'+qua_jpg);
+                consolelog('压缩质量jpg:'+qua_jpg);
                 e.imgConvert(info.path, tempJpg, qua_jpg, function(){/*不管怎样先生成jpg，毕竟前面已经同意了*/
                     tempJpgSize = fs.statSync(tempJpg).size;
                     if(info.colorNum<256 && e.area <=10000){/*to png8*/
                         e.to_png8(info.path,tempPath,function(){
                             e.png_crush(tempPath,tempPngCrush,function(){
                                 copy(desSrc,desPath,function(){
-                                    fs.unlink(tempPath, function(err) { console.log(err) });
-//                                fs.unlink(tempPng, function(err) { console.log(err) });
-                                    fs.unlink(tempPngCrush, function(err) { console.log(err) });
+                                    fs.unlink(tempPath, function(err) { consolelog(err) });
+//                                fs.unlink(tempPng, function(err) { consolelog(err) });
+                                    fs.unlink(tempPngCrush, function(err) { consolelog(err) });
                                     e.newsize=fs.statSync(desPath).size;
                                     if(tempJpgSize < e.newsize){/*保留jpg*/
                                         copy(tempJpg,desJpg,function(){
@@ -222,7 +224,7 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                                            info.typeChange = true;
                                            info.changeSize = tempJpgSize;
                                             if(isWebp){
-                                                console.log('正在生成webp图片！');
+                                                consolelog('正在生成webp图片！');
                                                 e.to_webp(buff,desPath,webpDir,function(){
                                                     if(cb){
                                                         cb(info);
@@ -238,7 +240,7 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                                         fs.unlink(tempJpg);
                                         info.typeChange = false;
                                         if(isWebp){
-                                            console.log('正在生成webp图片！');
+                                            consolelog('正在生成webp图片！');
                                             e.to_webp(buff,desPath,webpDir,function(){
                                                 if(cb){
                                                     cb(info);
@@ -255,23 +257,23 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                         });
                     }else{
                         e.png_quant(tempPngCrush,tempPng,qua_jpg-1,qua_jpg,function(){/*压缩png*/
-                            console.log(22);
+                            consolelog(22);
                             tempPngSize=fs.statSync(tempPng).size;
                             if(tempPngSize < info.size){
                                 desSrc=tempPng;
                             }
                             copy(desSrc,desPath,function(){
-                                fs.unlink(tempPath, function(err) { console.log(err) });
+                                fs.unlink(tempPath, function(err) { consolelog(err) });
                                 e.newsize=fs.statSync(desPath).size;
-                                fs.unlink(tempPng, function(err) { console.log(err) });
-                                fs.unlink(tempPngCrush, function(err) { console.log(err) });
+                                fs.unlink(tempPng, function(err) { consolelog(err) });
+                                fs.unlink(tempPngCrush, function(err) { consolelog(err) });
                                 if(tempJpgSize < e.newsize){
                                     copy(tempJpg,desJpg,function(){/*保存jpg*/
                                         fs.unlink(tempJpg);
                                         info.typeChange = true;
                                         info.changeSize = tempJpgSize;
                                         if(isWebp){
-                                            console.log('正在生成webp图片！');
+                                            consolelog('正在生成webp图片！');
                                             e.to_webp(buff,desPath,webpDir,function(){
                                                 if(cb){
                                                     cb(info);
@@ -287,7 +289,7 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                                     fs.unlink(tempJpg);
                                     info.typeChange = false;
                                     if(isWebp){
-                                        console.log('正在生成webp图片！');
+                                        consolelog('正在生成webp图片！');
                                         e.to_webp(buff,desPath,webpDir,function(){
                                             if(cb){
                                                 cb(info);
@@ -308,12 +310,12 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                     e.to_png8(info.path,tempPath,function(){
                         e.png_crush(tempPath,tempPngCrush,function(){
                             copy(desSrc,desPath,function(){
-                                fs.unlink(tempPath, function(err) { console.log(err) });
-//                                fs.unlink(tempPng, function(err) { console.log(err) });
-                                fs.unlink(tempPngCrush, function(err) { console.log(err) });
+                                fs.unlink(tempPath, function(err) { consolelog(err) });
+//                                fs.unlink(tempPng, function(err) { consolelog(err) });
+                                fs.unlink(tempPngCrush, function(err) { consolelog(err) });
                                 e.newsize=fs.statSync(desPath).size;
                                 if(isWebp){
-                                    console.log('正在生成webp图片！');
+                                    consolelog('正在生成webp图片！');
                                     e.to_webp(buff,desPath,webpDir,function(){
                                         if(cb){
                                             cb(info);
@@ -341,20 +343,20 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                         if(qua <= 0) qua = 10;
                         if(qua >=100) qua = 99;
                     }
-                    console.log('压缩质量1:'+qua);
+                    consolelog('压缩质量1:'+qua);
                     e.png_quant(tempPngCrush,tempPng,qua-1,qua,function(){/*压缩png*/
-                        console.log(2);
+                        consolelog(2);
                         tempPngSize=fs.statSync(tempPng).size;
                         if(tempPngSize < info.size){
                             desSrc=tempPng;
                         }
                         copy(desSrc,desPath,function(){
-                            fs.unlink(tempPath, function(err) { console.log(err) });
+                            fs.unlink(tempPath, function(err) { consolelog(err) });
                             e.newsize=fs.statSync(desPath).size;
-                            fs.unlink(tempPng, function(err) { console.log(err) });
-                            fs.unlink(tempPngCrush, function(err) { console.log(err) });
+                            fs.unlink(tempPng, function(err) { consolelog(err) });
+                            fs.unlink(tempPngCrush, function(err) { consolelog(err) });
                             if(isWebp){
-                                console.log('正在生成webp图片！');
+                                consolelog('正在生成webp图片！');
                                 e.to_webp(buff,desPath,webpDir,function(){
                                     if(cb){
                                         cb(info);
@@ -380,21 +382,21 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                 if(qua2 <= 0) qua2 = 10;
                 if(qua2 >=100) qua2 = 99;
             }
-            console.log('压缩质量4:'+qua2);
+            consolelog('压缩质量4:'+qua2);
             e.png_quant(tempPngCrush,tempPng,qua2-1,qua2,function(){/*对比原图，压缩jpg，压缩png*/
-                console.log('压缩图片成功...');
+                consolelog('压缩图片成功...');
                 tempPngSize=fs.statSync(tempPng).size;
                 if(tempPngSize < info.size){
                     desSrc=tempPng;
                 }
                 copy(desSrc,desPath,function(){
-                    console.log('复制文件中...');
-                    fs.unlink(tempPath, function(err) { console.log(err) });
+                    consolelog('复制文件中...');
+                    fs.unlink(tempPath, function(err) { consolelog(err) });
                     e.newsize=fs.statSync(desPath).size;
-                    fs.unlink(tempPngCrush, function(err) { console.log(err) });
-                    fs.unlink(tempPng, function(err) { console.log(err) });
+                    fs.unlink(tempPngCrush, function(err) { consolelog(err) });
+                    fs.unlink(tempPng, function(err) { consolelog(err) });
                     if(isWebp){
-                        console.log('正在生成webp图片！');
+                        consolelog('正在生成webp图片！');
                         e.to_webp(buff,desPath,webpDir,function(){
                             if(cb){
                                 cb(info);
@@ -444,8 +446,8 @@ function jpgDeal(e,buff,tempPath,desPath,cb){
             var tempcrush=tempDir+ info.basename+'.temp-'+max+'-.png';
             e.png_crush(tempPath,tempcrush,function(){
                 copy(desSrc,tempcrush,function(){
-                    fs.unlink(tempcrush, function(err) { console.log(err) });
-                    fs.unlink(tempPath, function(err) { console.log(err) });
+                    fs.unlink(tempcrush, function(err) { consolelog(err) });
+                    fs.unlink(tempPath, function(err) { consolelog(err) });
                     e.newsize=fs.statSync(desSrc).size;
                 });
             });
@@ -473,12 +475,12 @@ function jpgDeal(e,buff,tempPath,desPath,cb){
                 desSrc=tempPath;
             }
             copy(desSrc,desPath,function(){
-                fs.unlink(tempPath, function(err) { console.log(err) });
-                fs.unlink(tempJpg, function(err) { console.log(err) });
+                fs.unlink(tempPath, function(err) { consolelog(err) });
+                fs.unlink(tempJpg, function(err) { consolelog(err) });
 //                fs.unlink(desSrc);
                 e.newsize=fs.statSync(desPath).size;
                 if(isWebp){
-                    console.log('正在生成webp图片！');
+                    consolelog('正在生成webp图片！');
                     e.to_webp(buff,desPath,webpDir,function(){
                         if(cb){
                             cb(info);
@@ -542,7 +544,7 @@ function jpgDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
     var tempJpgSize = 0;
     var tempcrushSize = 0;
     /*先生成压缩jpg*/
-    console.log(qua);
+    consolelog(qua);
     var quality=qua-5;
     if(info.colorNum>10000){
         quality=qua-10;
@@ -555,7 +557,7 @@ function jpgDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
         if(quality <= 0) quality = 10;
         if(quality >=100) quality = 99;
     }
-    console.log('质量选取:'+quality);
+    consolelog('质量选取:'+quality);
     e.imgConvert(tempPath,tempJpg,quality,function(){
         tempJpgSize=fs.statSync(tempJpg).size;
         if(tempJpgSize < info.size){
@@ -567,23 +569,23 @@ function jpgDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
         }
         if(isTypeChange && e.colorNum <= 30000){/*允许转格式,jpg转png也有在颜色值少的情况下才允许转换*/
             var deal = function(){
-                console.log('允许转格式代码执行：');
+                consolelog('允许转格式代码执行：');
                 e.png_crush(tempcrush,descrush,function(){/*压缩下png*/
                     var c_size = fs.statSync(descrush).size;
                     if(c_size < e.newsize){/*如果png体积小于压缩过的jpg，留着png*/
-                        fs.unlink(tempcrush, function(err) { console.log(err) });
+                        fs.unlink(tempcrush, function(err) { consolelog(err) });
                         info.typeChange = true;
                         info.changeSize = c_size;
                     }else{/*还是用jpg，png也就不用保存了*/
-                        fs.unlink(tempcrush, function(err) { console.log(err) });
-                        fs.unlink(descrush, function(err) { console.log(err) });
+                        fs.unlink(tempcrush, function(err) { consolelog(err) });
+                        fs.unlink(descrush, function(err) { consolelog(err) });
                         info.typeChange = false;
                     }
                     copy(desSrc,desPath,function(){/*最后保存jpg并保存webp*/
-                        fs.unlink(tempPath, function(err) { console.log(err) });
-                        fs.unlink(tempJpg, function(err) { console.log(err) });
+                        fs.unlink(tempPath, function(err) { consolelog(err) });
+                        fs.unlink(tempJpg, function(err) { consolelog(err) });
                         if(isWebp){
-                            console.log('正在生成webp图片！');
+                            consolelog('正在生成webp图片！');
                             e.to_webp(buff,desPath,webpDir,function(){
                                 if(cb){
                                     cb(info);
@@ -608,10 +610,10 @@ function jpgDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
             }
         }else{/*不允许转换格式，直接生成webp然后结束*/
             copy(desSrc,desPath,function(){/*最后保存jpg并保存webp*/
-                fs.unlink(tempPath, function(err) { console.log(err) });
-                fs.unlink(tempJpg, function(err) { console.log(err) });
+                fs.unlink(tempPath, function(err) { consolelog(err) });
+                fs.unlink(tempJpg, function(err) { consolelog(err) });
                 if(isWebp){
-                    console.log('正在生成webp图片！');
+                    consolelog('正在生成webp图片！');
                     e.to_webp(buff,desPath,webpDir,function(){
                         if(cb){
                             cb(info);
@@ -660,7 +662,7 @@ function gifDeal(e,buff,tempPath,desPath,cb){
             desSrc=tempDir + tempgifQuant + info.basename + '.gif';
         }
         copy(desSrc,desPath,function(){
-            fs.unlink(tempPath, function(err) { console.log(err) });
+            fs.unlink(tempPath, function(err) { consolelog(err) });
             e.newsize=fs.statSync(desPath).size;
             fs.unlink(tempDir + tempgifQuant + info.basename + '.gif');
             if(cb){
@@ -703,11 +705,11 @@ function png8Deal(e,buff,tempPath,desPath,cb){
             desSrc=tempDir + tempPngCrush + info.basename + '.png';
         }
         copy(desSrc,desPath,function(){
-            fs.unlink(tempPath, function(err) { console.log(err) });
+            fs.unlink(tempPath, function(err) { consolelog(err) });
             e.newsize=fs.statSync(desPath).size;
             fs.unlink(tempDir + tempPngCrush + info.basename + '.png');
             if(isWebp){
-                console.log('正在生成webp图片！');
+                consolelog('正在生成webp图片！');
                 e.to_webp(buff,desPath,webpDir,function(){
                     if(cb){
                         cb(info);

@@ -6,9 +6,13 @@
  *  dragirl("#tigger"); //拖入 #tigger 显示在 #trigger
  *  dragirl("#tigger", ".showcase"); //拖入 #tigger 显示在 .showcase
  *  dragirl("#tigger", ".showcase", function (obj_callback) {
-		console.log(obj_callback.e.target.result,obj_callback.file.name,obj_callback.file.mozFullPath);
+		consolelog(obj_callback.e.target.result,obj_callback.file.name,obj_callback.file.mozFullPath);
 	});//回调
  */
+
+ function consolelog() {
+
+ }
 function addGlobalStyle(id, css) {
     var head, style;
     head = document.getElementsByTagName('head')[0];
@@ -69,13 +73,13 @@ function dragirl(tigger, showcase, callback) {
             beforeSize=0;/*压缩前的总体积（包括多图）*/
             afterSize=0;/*压缩后的总体积*/
             if(isDeal){/*已经有图片在处理中了*/
-                console.log('当前有图片正在处理，请稍后！');
+                consolelog('当前有图片正在处理，请稍后！');
                 var txt='<p class="tips error">当前有图片正在处理，请稍候！</p>';
                 $('.log-box').append(txt);
                 return false;
             }else{
                 $('.log-box,.end-log-box').html('');/*清空log框*/
-                console.log('图片上传中！');
+                consolelog('图片上传中！');
                 rightDealFile=0;
                 beforeTime=new Date().getTime();
                 var txt='<p class="tips head">文件上传中，请稍后！</p>';
@@ -86,7 +90,7 @@ function dragirl(tigger, showcase, callback) {
                 jQuery.each(e.dataTransfer.files, function (index, file) {
                     if(file.type==""){/*如果不是文件，可能是目录,zip包之类的*/
                         if(!fs.statSync(file.path).isDirectory()){/*如果不是目录*/
-                            console.log('文件' + file.path + '发生错误');
+                            consolelog('文件' + file.path + '发生错误');
                             var img_name=path.basename(file.path,'.'+path.extname(file.path).replace(/./,'').replace(/jpeg/,'jpg'));
                             //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                             var txt='<p class="log-item error"><span class="img-name">'+img_name+'</span><span class="img-info">出错code:013，请检查文件类型！</span><i class="img-ico"></i></p>';
@@ -99,7 +103,7 @@ function dragirl(tigger, showcase, callback) {
                         }
                         /*如果是拖拽目录上传*/
                         filesHaveDirctory=true;
-                        console.log('拖拽文件夹上传');
+                        consolelog('拖拽文件夹上传');
                         searchDir(file.path, function(err, results) {
                             fileCount-=1;/*减掉本身文件夹的量1*/
                             dealCount-=1;/*减掉本身文件夹的量1*/
