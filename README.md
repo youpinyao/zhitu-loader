@@ -4,7 +4,7 @@
 npm i zhitu-loader -D
 
 {
-  test: /\.(jpg|png|gif)$/,
+  test: /\.(jpeg|jpg|png|gif)$/,
   exclude: /(node_modules)/,
   use: [
     {

@@ -8,6 +8,8 @@ var fs = require('fs'),
 
 var jpegquality = require('jpegquality');/*获取jpg质量*/
 
+var dealCount = 0;
+
 
 /*获取png是否有alpha通道
 
@@ -40,7 +42,8 @@ var gulpRename = require("gulp-rename");
 var imageminWebp = require('imagemin-webp');
 
 function consolelog() {
-
+  // console.log();
+  // console.log(...arguments);
 }
 module.exports = Img;
 function Img(path,imgID,buff){
@@ -108,17 +111,17 @@ function Img(path,imgID,buff){
         if(imageinfo(buff)){
             that.realExtname=(imageinfo(buff).format).toLocaleLowerCase().replace(/jpeg/,'jpg');/*真实格式,类似png,jpeg*/
         }else{
-            consolelog('文件' + src + '发生错误');
+            consolelog('1-文件' + src + '发生错误');
             var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
             //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
             var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-01，请检查文件类型！</span><i class="img-ico"></i>';
-            $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-            //$('.log-box').append(txt);
+            // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+            //// $('.log-box').append(txt);
             dealCount-=1;/*每次处理完之后图片数-1*/
             if(dealCount==0){
                 //overDone();
             }
-            dealCountNum();
+            callback(that, false);
             return false;
         }
 
@@ -127,36 +130,37 @@ function Img(path,imgID,buff){
         im.identify(src, function (err, features){
             if (err){
                 consolelog(err);
-                consolelog('文件' + src + '发生错误');
+                consolelog('2-文件' + src + '发生错误');
 //                errorTips('文件发生错误，请检查文件类型');
                 var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                 //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                 var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-02，请检查文件类型！</span><i class="img-ico"></i>';
-                $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-                //$('.log-box').append(txt);
+                // // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                //// $('.log-box').append(txt);
                 dealCount-=1;/*每次处理完之后图片数-1*/
 
                 if(dealCount==0){
                     //overDone();
                 }
-                dealCountNum();
+
+                callback(that, false);
                 return false;
             }else{
                 im.identify(['-format', '%k', src], function(err, colorNum){
                     if (err) {
-                        consolelog('文件' + src + '发生错误');
+                        consolelog('3-文件' + src + '发生错误');
 //                        errorTips('文件发生错误，请检查文件类型');
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-03，请检查文件类型！</span><i class="img-ico"></i>';
-                        $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-                        //$('.log-box').append(txt);
+                        // // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                        //// $('.log-box').append(txt);
                         dealCount-=1;/*每次处理完之后图片数-1*/
 
                         if(dealCount==0){
                             //overDone();
                         }
-                        dealCountNum();
+                        callback(that, false);
                         return false;
                     }
                     /*重置暴露接口*/
@@ -236,27 +240,27 @@ function Img(path,imgID,buff){
         if(imageinfo(buff)){
             that.realExtname=(imageinfo(buff).format).toLocaleLowerCase().replace(/jpeg/,'jpg');/*真实格式,类似png,jpeg*/
         }else{
-            consolelog('文件' + src + '发生错误');
+            consolelog('4-文件' + src + '发生错误');
 //            errorTips('文件"'+that.basename+'"发生错误，请检查文件类型或内容');
             var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
             //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
             var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-04，请检查文件类型！</span><i class="img-ico"></i>';
-            $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-            //$('.log-box').append(txt);
+            // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+            //// $('.log-box').append(txt);
             dealCount-=1;/*每次处理完之后图片数-1*/
 
             if(dealCount==0){
                 //overDone();
             }
-            dealCountNum();
+            callback(that, false);
             return false;
         }
         if(that.realExtname!=that.extname){/*文件后缀与真实类型不符合*/
             var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
             //var txt='<p class="tips info">警告：文件<span class="img-name">'+img_name+'</span><span class="">后缀与真实文件类型不符合！</span></p>';
             var txt='<span class="img-name">'+img_name+'</span><span class="img-info">后缀与真实文件类型不符合！</span><i class="img-ico"></i>';
-            $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-            //$('.log-box').append(txt);
+            // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+            //// $('.log-box').append(txt);
         }
         that.colorNum=color_num;
         //that.quality=info.quality?(info.quality*100):0;
@@ -314,13 +318,13 @@ function Img(path,imgID,buff){
                 consolelog(err);
                 var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                 var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-05，请检查文件类型或重新单独上传！</span><i class="img-ico"></i>';
-                $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
                 dealCount-=1;/*每次处理完之后图片数-1*/
 
                 if(dealCount==0){
                     //overDone();
                 }
-                dealCountNum();
+                callback(that, false);
                 return false;
             });
             var w = fs.createWriteStream(des);
@@ -352,7 +356,7 @@ function Img(path,imgID,buff){
                 consolelog(err);
                 //var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                 //var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-06，PNG有损压缩出错！</span><i class="img-ico"></i>';
-                //$('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                //// $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
                 //dealCount-=1;/*每次处理完之后图片数-1*/
 //
                 //if(dealCount==0){
@@ -399,14 +403,14 @@ function Img(path,imgID,buff){
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-07，请检查文件类型！</span><i class="img-ico"></i>';
-                        $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-                        //$('.log-box').append(txt);
+                        // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                        //// $('.log-box').append(txt);
                         dealCount-=1;/*每次处理完之后图片数-1*/
 
                         if(dealCount==0){
                             //overDone();
                         }
-                        dealCountNum();
+                        callback(that, false);
                         return false;
                     }else{
                         if(callback) {
@@ -430,14 +434,14 @@ function Img(path,imgID,buff){
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-08，请检查文件类型！</span><i class="img-ico"></i>';
-                        $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-                        //$('.log-box').append(txt);
+                        // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                        //// $('.log-box').append(txt);
                         dealCount-=1;/*每次处理完之后图片数-1*/
 
                         if(dealCount==0){
                             //overDone();
                         }
-                        dealCountNum();
+                        callback(that, false);
                         return false;
                     }else{
                         if(callback) {
@@ -460,14 +464,14 @@ function Img(path,imgID,buff){
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-09，请检查文件类型！</span><i class="img-ico"></i>';
-                        $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-                        //$('.log-box').append(txt);
+                        // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                        //// $('.log-box').append(txt);
                         dealCount-=1;/*每次处理完之后图片数-1*/
 
                         if(dealCount==0){
                             //overDone();
                         }
-                        dealCountNum();
+                        callback(that, false);
                         return false;
                     }else{
                         if(callback) {
@@ -486,14 +490,14 @@ function Img(path,imgID,buff){
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-10，请检查文件类型！</span><i class="img-ico"></i>';
-                        // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-                        //$('.log-box').append(txt);
+                        // // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                        //// $('.log-box').append(txt);
                         dealCount-=1;/*每次处理完之后图片数-1*/
 
                         if(dealCount==0){
                             //overDone();
                         }
-                        dealCountNum();
+                        callback(that, false);
                         return false;
                     }
                     if(callback) callback();
@@ -508,14 +512,14 @@ function Img(path,imgID,buff){
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-11，转换格式失败！</span><i class="img-ico"></i>';
-                        $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-                        //$('.log-box').append(txt);
+                        // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                        //// $('.log-box').append(txt);
                         dealCount-=1;/*每次处理完之后图片数-1*/
 
                         if(dealCount==0){
                             //overDone();
                         }
-                        dealCountNum();
+                        callback(that, false);
                         return false;
                     }
                     if(callback) callback();
@@ -531,14 +535,14 @@ function Img(path,imgID,buff){
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-12，请检查文件类型！</span><i class="img-ico"></i>';
-                        $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
-                        //$('.log-box').append(txt);
+                        // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                        //// $('.log-box').append(txt);
                         dealCount-=1;/*每次处理完之后图片数-1*/
 
                         if(dealCount==0){
                             //overDone();
                         }
-                        dealCountNum();
+                        callback(that, false);
                         return false;
                     }
                     if(callback) callback();

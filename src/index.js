@@ -17,8 +17,7 @@ module.exports = function loader(source) {
   }) => {
     this.resource = resource;
     callback(null, data);
-  }, (err) => {
-    console.error(err);
+  }, () => {
     callback(null, source);
   });
 };

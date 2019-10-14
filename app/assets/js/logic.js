@@ -42,6 +42,7 @@ var legalImgType = ["png", "jpg", "gif", "bmp", "webp"];
 var isResize = false;
 var replaceFile = false;
 function consolelog() {
+  // console.log();
   // console.log(...arguments);
 }
 /*数组的深度拷贝*/
@@ -243,7 +244,7 @@ function each(info,buff, callback){
     makeDir(tempDir_single);
     var img=new Img(info.path,id,buff);
 
-    img.init(function(e){
+    img.init(function(e, success){
         if(!contains(legalImgType,e.realExtname)) return '';/*如果后缀格式不符合图片类型*/
         else{
             var tempPath= tempDir_single + e.basename+'.'+ e.extname;/*临时文件*/
@@ -258,6 +259,10 @@ function each(info,buff, callback){
             var that=e;
             var resize = true;
             var d;
+
+            if (success === false) {
+              return callback(false);
+            }
 
             copy(e.path,tempPath,function(){
                 d = function(){
@@ -370,6 +375,7 @@ function each(info,buff, callback){
                                 // }
                                 //$('.log-box').append(txt);
                                 // dealCountNum();
+
                                 callback(info);
                             });
                             break;

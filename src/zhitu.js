@@ -40,11 +40,20 @@ module.exports.upload = function upload({
       process.env.ZHITU_TYPECHANGE = type_change;
 
       logicEach(file, file.data, (info) => {
+        // 优化失败
+        if (info === false) {
+          progress.tick(10, {
+            description: chalk.red('优化失败'),
+          });
+          reject(new Error('优化失败'));
+          return;
+        }
+
         let resource = file_path;
-        let newFilePath = info.path.replace(`${path.sep}${info.basename}`, `${path.sep}zhitu-des${path.sep}${file.id}/${info.basename}`);
-        let webpFilePath = info.path.replace(`${path.sep}${info.basename}`, `${path.sep}zhitu-des${path.sep}${file.id}/webp/${info.basename}`);
+        let newFilePath = info.path.replace(`${path.sep}${info.basename}.`, `${path.sep}zhitu-des${path.sep}${file.id}/${info.basename}.`);
+        let webpFilePath = info.path.replace(`${path.sep}${info.basename}.`, `${path.sep}zhitu-des${path.sep}${file.id}/webp/${info.basename}.`);
         let covertFilePath = newFilePath;
-        let clalkColor = 1;
+        let clalkColor = 2;
 
         const rootDirPath = path.resolve(path.dirname(info.path), 'zhitu-des');
 
@@ -52,13 +61,13 @@ module.exports.upload = function upload({
         webpFilePath[webpFilePath.length - 1] = 'webp';
         webpFilePath = webpFilePath.join(`${path.sep}${info.basename}.`);
 
-        covertFilePath = covertFilePath.split(`${path.sep}${info.basename}`);
-        covertFilePath[covertFilePath.length - 1] = '-jpg.jpg';
-        covertFilePath = covertFilePath.join(`${path.sep}${info.basename}`);
+        covertFilePath = covertFilePath.split(`${path.sep}${info.basename}.`);
+        covertFilePath[covertFilePath.length - 1] = 'jpg';
+        covertFilePath = covertFilePath.join(`${path.sep}${info.basename}-jpg.`);
 
         const converStat = fs.existsSync(covertFilePath) ? fs.statSync(covertFilePath) : null;
         const webpStat = fs.existsSync(webpFilePath) ? fs.statSync(webpFilePath) : null;
-        let newFileStat = fs.statSync(newFilePath);
+        let newFileStat = fs.existsSync(newFilePath) ? fs.statSync(newFilePath) : { size: 0 };
 
         // 比对大小，选最优
         if (type_change && converStat && converStat.size < newFileStat.size) {
@@ -67,7 +76,7 @@ module.exports.upload = function upload({
           resource = resource.split(`${path.sep}${info.basename}.`);
           resource[resource.length - 1] = 'jpg';
           resource = resource.join(`${path.sep}${info.basename}.`);
-          clalkColor = 2;
+          clalkColor = 3;
         }
 
         // 比对大小，选最优
@@ -77,43 +86,45 @@ module.exports.upload = function upload({
           resource = resource.split(`${path.sep}${info.basename}.`);
           resource[resource.length - 1] = 'webp';
           resource = resource.join(`${path.sep}${info.basename}.`);
-          clalkColor = 2;
+          clalkColor = 4;
         }
 
         // 如果比原始文件大，就不变
         if (fileStat.size < newFileStat.size) {
           newFilePath = file_path;
           newFileStat = fileStat;
-          resource = this.file_path;
-          clalkColor = 0;
+          resource = file_path;
+          clalkColor = 1;
         }
 
-        const clalkLog = chalk[['white', 'green', 'blue'][clalkColor]];
+        const clalkLog = chalk[['red', 'white', 'green', 'blue', 'magenta'][clalkColor]];
         const newFileSize = parseFloat((newFileStat.size / 1024).toFixed(2));
 
-        resolve({
-          data: fs.readFileSync(newFilePath),
-          resource,
-        });
+        fs.readFile(newFilePath, (err, data) => {
+          resolve({
+            data,
+            resource,
+          });
 
-        progress.tick(10, {
-          description: `${fileSize}KB ${clalkLog(`${resource} ${newFileSize}KB`)}`,
-        });
+          progress.tick(10, {
+            description: `${fileSize}KB ${clalkLog(`${resource} ${newFileSize}KB`)}`,
+          });
 
-        fse.removeSync(path.resolve(rootDirPath, `${file.id}`));
-        fse.readdir(rootDirPath, (err, files) => {
-          if (err) {
-            throw new Error(err);
-          }
+          fse.remove(path.resolve(rootDirPath, `${file.id}`));
+          fse.readdir(rootDirPath, (derr, files) => {
+            if (err) {
+              throw new Error(derr);
+            }
 
-          if (!(files && files.length)) {
-            fse.remove(rootDirPath);
-          }
+            if (!(files && files.length)) {
+              fse.remove(rootDirPath);
+            }
+          });
         });
       });
     } catch (err) {
       progress.tick(10, {
-        description: '优化失败',
+        description: chalk.red('优化失败'),
       });
       reject(err);
     }
