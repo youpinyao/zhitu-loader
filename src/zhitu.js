@@ -89,8 +89,8 @@ module.exports.upload = function upload({
           clalkColor = 4;
         }
 
-        // 如果比原始文件大，就不变
-        if (fileStat.size - newFileStat.size < 1) {
+        // 如果比原始文件大，或压缩不大于1k，就不变
+        if (fileStat.size - newFileStat.size < 1024) {
           newFilePath = file_path;
           newFileStat = fileStat;
           resource = file_path;
