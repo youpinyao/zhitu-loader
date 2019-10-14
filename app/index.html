@@ -1,0 +1,274 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>智图_客户端</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="智图——客户端" name="description">
+    <meta content="" name="keywords">
+    <meta itemprop="name" content="智图——客户端"/>
+    <meta itemprop="description" name="description" content="智图——客户端"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link rel="stylesheet" href="assets/css/index.css">
+</head>
+
+<body class="drop-body">
+<div class="mask-install" id='install'>
+    <div class="mod-tips"><div class="gb-tips-layer"><i class="icon-hook"></i>正在启动安装插件，请安装成功后重新打开智图app即可使用
+        <p><a class="qa-link" href="">安装遇到问题</a></p>
+    </div></div>
+</div>
+<i class="upload-ico bg-ico" style="opacity: 0!important;cursor: default!important;" title=""></i>
+<div class="mod-setting">
+    <b style="position: absolute;left: 50%;margin-left:15px;top:-10px;">
+        <b class="mod-trig trig-t solid"></b>
+    </b>
+    <!--<a class="setting-close" title="收起设置"></a>-->
+    <div class="setting-main">
+        <section class="setting-item" id="item-chkwebP" title="开启后将同时生成webP格式文件">
+            <p class="setting-title">生成webP</p>
+
+            <div class="slideWrap">
+                <input type="checkbox" value="None" id="chkwebP" name="check">
+                <label for="chkwebP"></label>
+            </div>
+        </section>
+        <section class="setting-item" id="item-replaceFile" title="开启后将不保留原图">
+            <p class="setting-title">替换原图</p>
+
+            <div class="slideWrap">
+                <input type="checkbox" value="None" id="replaceFile" name="check">
+                <label for="replaceFile"></label>
+            </div>
+        </section>
+        <!--<section class="setting-item" id="item-lessQuality" title="开启后质量降低同时体积变小">-->
+            <!--<p class="setting-title">深度压缩</p>-->
+            <!--<div class="slideWrap">-->
+                <!--<input type="checkbox" value="None" id="lessQuality" name="check">-->
+                <!--<label for="lessQuality"></label>-->
+            <!--</div>-->
+        <!--</section>-->
+        <section class="setting-item" id="item-isTypeChange" title="打开后智图会帮你自动选择合适的图片格式，同时处理速度会变慢">
+            <p class="setting-title">自动转格式</p>
+            <div class="slideWrap">
+                <input type="checkbox" value="None" id="isTypeChange" name="check">
+                <label for="isTypeChange"></label>
+            </div>
+        </section>
+        <section class="setting-item" id="item-isResize" title="将会根据你输入的值裁剪或者缩放图片">
+            <p class="setting-title">裁剪缩放</p>
+            <div class="slideWrap">
+                <input type="checkbox" value="None" id="isResize" name="check">
+                <label for="isResize"></label>
+            </div>
+        </section>
+        <section class="setting-input input-resize" style="display: none">
+            <div class="input-wrap">
+                <p class="input-box">宽：<input class="input-text" id="cut_w" type="number" min="1" value="1" /></p>
+                <p class="input-box">高：<input class="input-text" id="cut_h" type="number" min="1" value="1" /></p>
+                <b class="ratio-link" title="限制宽高比：限制后会以设置中的较小值对图片做等比缩放；
+不限制宽高比：将以设置中的较小值对图片做缩放之后再居中裁剪。"></b>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="mod-nav">
+    <a class="logo mod-link" title="打开智图官网"><img src="assets/img/logo@2x.png"/ width="170" height="60"></a>
+    <a class="txt-link mod-link" id="contact-us" title="使用指南"></a>
+    <button class="btn-nav" title="展开设置">
+        <b class="nav-line line-t"></b>
+        <b class="nav-line line-m"></b>
+        <b class="nav-line line-b"></b>
+    </button>
+</div>
+<div class="mod-body">
+    <div class="upload-area" title="点击上传文件">
+        <div class="upload-ico"></div>
+        <p class="title-txt">Drop your PNGs or JPGs here!</p>
+    </div>
+    <div class="quality-box">
+        <span>质量调节：</span>
+        <a title="10%" class="quality-btn" id="q1">10%</a>
+        <a title="30%" class="quality-btn" id="q2">30%</a>
+        <a title="50%" class="quality-btn" id="q3">50%</a>
+        <a title="80%" class="quality-btn" id="q4">80%</a>
+        <a title="默认" class="quality-btn active" id="q5">默认</a>
+        <a title="保真" class="quality-btn" id="q6">保真</a>
+        <!--<span class="quality-tips">请先上传图片！</span>-->
+    </div>
+    <div class="end-info-box"></div>
+    <!--专门放结束信息的box-->
+    <div class="end-log-box"></div>
+    <div class="log-box" id="img-log-box"></div>
+</div>
+<div class="mod-contact">
+    <b style="position: absolute;left: 50%;margin-left:15px;top:-10px;">
+        <b class="mod-trig trig-t solid"></b>
+    </b>
+    <div class="version-tips">
+        <h2 class="tips-title">检测到新版本 <a class="download-link" title="http://zhitu.isux.us/index.php/preview/download">前往下载</a></h2>
+        <!--<p  class="tips-text"><a class="download-link">前往下载</a></p>-->
+    </div>
+    <h2 class="tips-title">使用指南</h2>
+    <p  class="tips-text">把需要压缩的图片拉进界面任何区域即可。</p>
+    <p  class="tips-text">默认压缩后的图片将保存在同级的zhitu-des目录下。</p>
+    <p  class="tips-text">F5可刷新页面。</p>
+    <h2 class="tips-title">联系我们</h2>
+    <p  class="tips-text">Copyright Tencent ISUX</p>
+    <p  class="tips-text">邮箱：tonystudy@qq.com</p>
+    <p  class="tips-text"><a class="qa-link">使用遇到问题</a></p>
+</div>
+<!--检测IM存在-->
+<script type="text/javascript" id="step-0">
+    var path = require('path');
+</script>
+<script src="assets/js/testCheck.js"></script>
+<script type="text/javascript" id="step-1">
+    checkBin();
+</script>
+<script type="text/javascript" id="step-2">
+
+    /*设置与常量初始化*/
+    var isDeal = false;
+    /*当为true时候不可继续上传，等到所有图片处理完之后，置为false*/
+    var fileCount = 0;
+    /*当前上传的图片数，每次上传更新*/
+    var dealCount = 0;
+    /*已处理的图片数，每次处理完之后-1*/
+    var fileDone = 0;
+    /*当前上传已完成的图片数，全部处理完之后置零*/
+    var fileArray = [];
+    /*当前要处理的文件列表，全部处理完之后清空*/
+    var buffArray = [];
+    /*当前要处理的文件列表的buff，全部处理完之后清空*/
+    var isWebp = false;
+    /*是否要生成webP*/
+    var legalImgType = ["png", "jpg", "gif", "bmp", "webp"];
+    /*合法的图片类型*/
+    var isTypeChange = false;
+    /*允许转换格式*/
+    var replaceFile = false;
+    /*压缩完存储在当前目录下的zhitu-des目录（如果没有des目录就动态新建）*/
+    var percentAll = 0;
+    /*用作进度条用的，为fileCount的两倍，一倍是上传，一倍是处理*/
+    var percentCur = 0;
+    /*跟上面的对应表示已进行的比例*/
+    var beforeSize = 0;
+    /*压缩前的总体积（包括多图）*/
+    var afterSize = 0;
+    /*压缩后的总体积*/
+    var beforeTime = 0;
+    var afterTime = 0;
+    var dirName = 'zhitu-des';
+    var webpDirName = 'webp';
+    var tempDirName = 'temp';
+    var rightDealFile = 0;
+    /*经过正确处理的文件数*/
+    var lessQuality = false;/*深度压缩，有了质量选择之后取消*/
+    /*是否关掉log*/
+    var isRefresh=false;/*是否F5刷新*/
+    /*2016/10/28 add by color*/
+    var lastFileArray = [];/*上一次处理的文件，留着重选的时候用*/
+    var qualityNum = 0;/*选择压缩质量，选了会有值，默认的话此值为0，最终压缩率为XX-qualityNum*/
+
+    var isResize = false;/*是否允许裁剪*/
+    var isRatio = false;/*裁剪是否固定宽高比*/
+
+    var tempDirArray = [];/*当有多目录的时候，删除每个temp*/
+
+    var  desDir = __dirname + path.sep +dirName+path.sep;
+    /*最终目录*/
+    var webpDir = __dirname + path.sep +dirName+path.sep+webpDirName+path.sep;
+    /*最终目录*/
+    var tempDir = __dirname + path.sep +dirName+path.sep+tempDirName+path.sep;
+    /*临时目录*/
+    var _max = 5,/*最大进程同时处理量*/
+        _index = _max - 1;/*计数器*/
+</script>
+<script src="assets/js/jquery.js"></script>
+<!--数据的逻辑操作-->
+<script src="assets/js/logic.js"></script>
+<!--function是主要的函数封装-->
+<script src="assets/js/function.js"></script>
+<!--检查版本是否有更新-->
+<script src="assets/js/version.js"></script>
+<!--dragirl是拖拽处理-->
+<script src="assets/js/dragirl.js"></script>
+<!--image是主要的图片处理方法-->
+<script src="assets/js/image.js"></script>
+<!--准备工作-->
+<script type="text/javascript" id="step-3">
+
+    /*引入关键库*/
+    //var Img = require('./img');
+    var colors = require('./assets/js/colors');
+    var Img = require('./assets/js/img');
+    var fs = require('fs');
+    var async = require('async');
+    var dialog = require('electron').remote.dialog;
+    var shell = require('electron').shell;
+    var os = require('os');
+    var exec = require('child_process').exec;
+    var hostname=os.hostname(),
+        rtx = hostname.match(/\w+/)[0],
+        ip = ip(),
+        domain='local network';
+
+
+
+    /*准备工作开始*/
+    if (window.localStorage.getItem('isWebP') == 'true') {
+        $('#chkwebP').attr("checked", "checked");
+        isWebp = true;
+    }
+    if (window.localStorage.getItem('isTypeChange') == 'true') {
+        $('#isTypeChange').attr("checked", "checked");
+        isTypeChange = true;
+    }
+    if (window.localStorage.getItem('replaceFile') == 'true') {
+        $('#replaceFile').attr("checked", "checked");
+        replaceFile = true;
+    }
+    if (window.localStorage.getItem('isResize') == 'true') {
+        $('#isResize').attr("checked", "checked");
+        isResize = true;
+        $('.input-resize').show(150);
+    }
+    if (window.localStorage.getItem('isRatio') == 'true') {
+        isRatio = true;
+        $('.input-resize .input-wrap').addClass('active');
+    }
+    makeDir(desDir);
+    if (isWebp) makeDir(webpDir);
+    makeDir(tempDir);
+
+    /*获取域名信息并且告知服务器app被打开了*/
+    getDomain(function(){
+        /*type:1表示打开，type:2表示关闭*/
+        if(window.localStorage.getItem('loginActive') == 'true'){/*当前是刷新*/
+            /*不鸟他*/
+        }else{
+            setAjax({
+                name:rtx,
+                hostname:hostname,
+                domain:domain,
+                date:Date(),
+                ip:ip,
+                type:1
+            });
+            window.localStorage.setItem('loginActive', true);/*已登录*/
+        }
+    });
+
+    /*准备工作结束*/
+
+</script>
+
+<!--页面的交互操作-->
+<script src="assets/js/operation.js"></script>
+
+</body>
+
+</html>
