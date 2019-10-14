@@ -23,6 +23,10 @@ module.exports.upload = function upload({
       total: 10,
     });
 
+    progress.tick({
+      description: '优化中',
+    });
+
     const file = {
       name: fileName,
       path: file_path,
@@ -30,10 +34,6 @@ module.exports.upload = function upload({
       id: uuid(),
       data: fs.readFileSync(file_path),
     };
-
-    progress.tick({
-      description: '优化中',
-    });
 
     try {
       process.env.ZHITU_QUALITY = [4 * 20, 3 * 20, 2 * 20, 1 * 20, 0, -15][quality] || 0;
@@ -97,7 +97,7 @@ module.exports.upload = function upload({
           clalkColor = 1;
         }
 
-        const clalkLog = chalk[['red', 'white', 'green', 'blue', 'magenta'][clalkColor]];
+        const clalkLog = chalk[['red', 'yellow', 'green', 'blue', 'magenta'][clalkColor]];
         const newFileSize = parseFloat((newFileStat.size / 1024).toFixed(2));
 
         fs.readFile(newFilePath, (err, data) => {
@@ -107,7 +107,7 @@ module.exports.upload = function upload({
           });
 
           progress.tick(10, {
-            description: `${fileSize}KB ${clalkLog(`${resource} ${newFileSize}KB`)}`,
+            description: `${fileSize}KB ${clalkLog(clalkColor === 1 ? '无需优化' : `${resource} ${newFileSize}KB`)}`,
           });
 
           fse.remove(path.resolve(rootDirPath, `${file.id}`));
