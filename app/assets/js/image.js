@@ -22,15 +22,14 @@ var isWebp = true;
 var legalImgType = ["png", "jpg", "gif", "bmp", "webp"];
 var isResize = false;
 var replaceFile = false;
-var qualityNum = process.env.ZHITU_QUALITY || 0;
-var isTypeChange = process.env.ZHITU_TYPECHANGE || false;
-
 
 function consolelog() {
-
+  // console.log(...arguments);
 }
  module.exports.pngDeal = pngDeal;
 function pngDeal(e,buff,tempPath,desPath,cb){
+  var qualityNum = process.env.ZHITU_QUALITY || 0;
+  var isTypeChange = process.env.ZHITU_TYPECHANGE || false;
     var max=Math.floor(Math.random()*100000+1);
     var desSrc=tempPath;/*最终存储的文件，暂时先当做tempPath处理*/
     var qua=80;/*png压缩到jpg的压缩率*/
@@ -158,6 +157,8 @@ function pngDeal(e,buff,tempPath,desPath,cb){
 }
 module.exports.pngDeal_With_TypeChange = pngDeal_With_TypeChange;
 function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
+  var qualityNum = process.env.ZHITU_QUALITY || 0;
+  var isTypeChange = process.env.ZHITU_TYPECHANGE || false;
 
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
     var desDir,
@@ -168,9 +169,9 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
         webpDir=path.dirname(e.path)+path.sep+webpDirName+path.sep;/*最终目录*/
         tempDir=path.dirname(e.path)+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir =path.dirname(e.path)+path.sep+dirName+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep;/*最终目录*/
+        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
 
@@ -220,7 +221,7 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                                     e.newsize=fs.statSync(desPath).size;
                                     if(tempJpgSize < e.newsize){/*保留jpg*/
                                         copy(tempJpg,desJpg,function(){
-                                           fs.unlink(tempJpg);
+                                           fs.unlink(tempJpg, function(err) { consolelog(err) });
                                            info.typeChange = true;
                                            info.changeSize = tempJpgSize;
                                             if(isWebp){
@@ -237,7 +238,7 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                                             }
                                         });
                                     }else{
-                                        fs.unlink(tempJpg);
+                                        fs.unlink(tempJpg, function(err) { consolelog(err) });
                                         info.typeChange = false;
                                         if(isWebp){
                                             consolelog('正在生成webp图片！');
@@ -269,7 +270,7 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                                 fs.unlink(tempPngCrush, function(err) { consolelog(err) });
                                 if(tempJpgSize < e.newsize){
                                     copy(tempJpg,desJpg,function(){/*保存jpg*/
-                                        fs.unlink(tempJpg);
+                                        fs.unlink(tempJpg, function(err) { consolelog(err) });
                                         info.typeChange = true;
                                         info.changeSize = tempJpgSize;
                                         if(isWebp){
@@ -286,7 +287,7 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
                                         }
                                     });
                                 }else{
-                                    fs.unlink(tempJpg);
+                                    fs.unlink(tempJpg, function(err) { consolelog(err) });
                                     info.typeChange = false;
                                     if(isWebp){
                                         consolelog('正在生成webp图片！');
@@ -416,6 +417,8 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
 }
 module.exports.jpgDeal = jpgDeal;
 function jpgDeal(e,buff,tempPath,desPath,cb){
+  var qualityNum = process.env.ZHITU_QUALITY || 0;
+  var isTypeChange = process.env.ZHITU_TYPECHANGE || false;
     var max=Math.floor(Math.random()*100000+1);
     /*先确定压缩率*/
     var qua=0;
@@ -497,6 +500,8 @@ function jpgDeal(e,buff,tempPath,desPath,cb){
 }
 module.exports.jpgDeal_With_TypeChange = jpgDeal_With_TypeChange;
 function jpgDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
+  var qualityNum = process.env.ZHITU_QUALITY || 0;
+  var isTypeChange = process.env.ZHITU_TYPECHANGE || false;
 
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
     var desDir,
@@ -507,9 +512,9 @@ function jpgDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
         webpDir=path.dirname(e.path)+path.sep+webpDirName+path.sep;/*最终目录*/
         tempDir=path.dirname(e.path)+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir =path.dirname(e.path)+path.sep+dirName+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep;/*最终目录*/
+        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
 
@@ -630,6 +635,8 @@ function jpgDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
 }
 module.exports.gifDeal = gifDeal;
 function gifDeal(e,buff,tempPath,desPath,cb){
+  var qualityNum = process.env.ZHITU_QUALITY || 0;
+  var isTypeChange = process.env.ZHITU_TYPECHANGE || false;
 
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
     var desDir,
@@ -640,9 +647,9 @@ function gifDeal(e,buff,tempPath,desPath,cb){
         webpDir=path.dirname(e.path)+path.sep+webpDirName+path.sep;/*最终目录*/
         tempDir=path.dirname(e.path)+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir =path.dirname(e.path)+path.sep+dirName+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep;/*最终目录*/
+        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
 
@@ -664,7 +671,7 @@ function gifDeal(e,buff,tempPath,desPath,cb){
         copy(desSrc,desPath,function(){
             fs.unlink(tempPath, function(err) { consolelog(err) });
             e.newsize=fs.statSync(desPath).size;
-            fs.unlink(tempDir + tempgifQuant + info.basename + '.gif');
+            fs.unlink(tempDir + tempgifQuant + info.basename + '.gif', function(err) { consolelog(err) });
             if(cb){
                 cb(info);
             }
@@ -673,6 +680,8 @@ function gifDeal(e,buff,tempPath,desPath,cb){
 }
 module.exports.png8Deal = png8Deal;
 function png8Deal(e,buff,tempPath,desPath,cb){
+  var qualityNum = process.env.ZHITU_QUALITY || 0;
+  var isTypeChange = process.env.ZHITU_TYPECHANGE || false;
 
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
     var desDir,
@@ -683,9 +692,9 @@ function png8Deal(e,buff,tempPath,desPath,cb){
         webpDir=path.dirname(e.path)+path.sep+webpDirName+path.sep;/*最终目录*/
         tempDir=path.dirname(e.path)+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir =path.dirname(e.path)+path.sep+dirName+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep;/*最终目录*/
+        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
 
@@ -707,7 +716,7 @@ function png8Deal(e,buff,tempPath,desPath,cb){
         copy(desSrc,desPath,function(){
             fs.unlink(tempPath, function(err) { consolelog(err) });
             e.newsize=fs.statSync(desPath).size;
-            fs.unlink(tempDir + tempPngCrush + info.basename + '.png');
+            fs.unlink(tempDir + tempPngCrush + info.basename + '.png', function(err) { consolelog(err) });
             if(isWebp){
                 consolelog('正在生成webp图片！');
                 e.to_webp(buff,desPath,webpDir,function(){

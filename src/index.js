@@ -11,7 +11,11 @@ module.exports = function loader(source) {
   zhitu.upload({
     file_path,
     ...loaderUtils.getOptions(this),
-  }).then((data) => {
+  }).then(({
+    data,
+    resource,
+  }) => {
+    this.resource = resource;
     callback(null, data);
   }, (err) => {
     console.error(err);

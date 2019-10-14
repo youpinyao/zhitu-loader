@@ -42,7 +42,7 @@ var legalImgType = ["png", "jpg", "gif", "bmp", "webp"];
 var isResize = false;
 var replaceFile = false;
 function consolelog() {
-
+  // console.log(...arguments);
 }
 /*数组的深度拷贝*/
 function getType(o){
@@ -218,7 +218,8 @@ function each(info,buff, callback){
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和image.js中同步*/
     var desDir_single,
         webpDir_single,
-        tempDir_single;
+        tempDir_single,
+        rootDesDir;
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和image.js中同步*/
 
     if(replaceFile){/*替换原图*/
@@ -226,15 +227,17 @@ function each(info,buff, callback){
         webpDir = webpDir_single=path.dirname(info.path)+path.sep+webpDirName+path.sep;/*最终目录*/
         tempDir = tempDir_single=path.dirname(info.path)+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir  = desDir_single =path.dirname(info.path)+path.sep+dirName+path.sep;/*最终目录*/
-        webpDir = webpDir_single=path.dirname(info.path)+path.sep+dirName+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir = tempDir_single=path.dirname(info.path)+path.sep+dirName+path.sep+tempDirName+path.sep;/*临时目录*/
+        rootDesDir  = desDir_single =path.dirname(info.path)+path.sep+dirName+path.sep;/*最终目录*/
+        desDir  = desDir_single =path.dirname(info.path)+path.sep+dirName+path.sep+info.id+path.sep;/*最终目录*/
+        webpDir = webpDir_single=path.dirname(info.path)+path.sep+dirName+path.sep+info.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir = tempDir_single=path.dirname(info.path)+path.sep+dirName+path.sep+info.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     if(tempDirArray.indexOf(tempDir_single) < 0){/*临时目录集合*/
         tempDirArray.push(tempDir_single);
     }
     consolelog(desDir_single, tempDir_single);
 
+    makeDir(rootDesDir);
     makeDir(desDir_single);
     if(isWebp) makeDir(webpDir_single);
     makeDir(tempDir_single);

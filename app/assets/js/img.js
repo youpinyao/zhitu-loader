@@ -187,6 +187,7 @@ function Img(path,imgID,buff){
         color_num=colors;
         /*重置暴露属性*/
         that.path=src;
+        that.id = id;
         that.size=fs.statSync(that.path).size;
 //        consolelog('file size:' + that.size);
         that.newsize=0;
@@ -485,7 +486,7 @@ function Img(path,imgID,buff){
                         var img_name=paths.basename(src,'.'+paths.extname(src).replace(/./,'').replace(/jpeg/,'jpg'));
                         //var txt='<p class="tips error">文件<span class="img-name">'+img_name+'</span><span class="">出错，请检查文件类型！</span></p>';
                         var txt='<span class="img-name">'+img_name+'</span><span class="img-info">出错-10，请检查文件类型！</span><i class="img-ico"></i>';
-                        $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
+                        // $('.log-box').find('#item-'+id).removeClass('active').addClass('error').html(txt);
                         //$('.log-box').append(txt);
                         dealCount-=1;/*每次处理完之后图片数-1*/
 
