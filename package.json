@@ -1,11 +1,12 @@
 {
   "name": "zhitu-loader",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "src/index.js",
   "scripts": {
     "postinstall": "node postinstall.js",
-    "prepublish": "node prepublish.js"
+    "prepublish": "node prepublish.js",
+    "postpublish": "node postpublish.js"
   },
   "repository": {
     "type": "git",
