@@ -90,7 +90,7 @@ module.exports.upload = function upload({
         }
 
         // 如果比原始文件大，就不变
-        if (fileStat.size < newFileStat.size) {
+        if (fileStat.size - newFileStat.size < 1) {
           newFilePath = file_path;
           newFileStat = fileStat;
           resource = file_path;
