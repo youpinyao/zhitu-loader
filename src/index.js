@@ -12,13 +12,10 @@ module.exports = function loader(source) {
 
   count += 1;
 
-  if (count === 1) {
-    console.log();
-  }
-
   zhitu.upload({
     file_path,
     ...loaderUtils.getOptions(this),
+    count,
   }).then(({
     data,
     resource,

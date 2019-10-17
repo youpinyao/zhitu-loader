@@ -7,20 +7,39 @@ const fse = require('fs-extra');
 
 const logicEach = require('../app/assets/js/logic').each;
 
-module.exports.upload = function upload({
-  file_path,
-  quality = 5, // 0 10%, 1 30%, 2 50%, 3  80%, 4 默认, 5 保真
-  type_change = false, // 自动格式转换
-  webp = false,
-  dir_name = '.zhitu-des',
-}) {
-  return new Promise((resolve, reject) => {
-    const fileName = path.basename(file_path);
-    const fileStat = fs.statSync(file_path);
-    const fileSize = parseFloat((fileStat.size / 1024).toFixed(2));
-    const rootDirPath = path.join(process.cwd(), dir_name);
-    const fileData = fs.readFileSync(file_path);
+const cacheCallback = {};
 
+module.exports.upload = function upload(options) {
+  const {
+    file_path,
+    quality = 5, // 0 10%, 1 30%, 2 50%, 3  80%, 4 默认, 5 保真
+    type_change = false, // 自动格式转换
+    webp = false,
+    dir_name = '.zhitu-des',
+    count,
+  } = options;
+  const fileName = path.basename(file_path);
+  const fileStat = fs.statSync(file_path);
+  const fileSize = parseFloat((fileStat.size / 1024).toFixed(2));
+  const rootDirPath = path.join(process.cwd(), dir_name);
+  const optionPath = path.join(rootDirPath, 'option.json');
+  const fileData = fs.readFileSync(file_path);
+
+  // 配置文件判断
+  if (count === 1) {
+    if (fs.existsSync(optionPath)
+    && fs.readFileSync(optionPath).toString() !== JSON.stringify(options)) {
+      fse.removeSync(rootDirPath);
+    }
+
+    if (!fs.existsSync(rootDirPath)) {
+      fs.mkdirSync(rootDirPath);
+    }
+
+    fs.writeFileSync(optionPath, JSON.stringify(options));
+  }
+
+  return new Promise((resolve, reject) => {
     const file = {
       name: fileName,
       path: file_path,
@@ -31,9 +50,20 @@ module.exports.upload = function upload({
       ext: path.parse(file_path).ext,
       data: fileData,
     };
+    const cut = (text, len) => {
+      let arr = `${text}`.split('');
+
+      if (arr.length >= len) {
+        arr = arr.splice(arr.length - len, len);
+      } else {
+        arr = arr.concat(Array(len - arr.length).fill('-'));
+      }
+
+      return arr.join('');
+    };
 
     const consolelog = (...args) => {
-      console.log(...args, file_path);
+      console.log(file.id, cut(file.name, 30), ...args);
     };
     const removeDir = () => {
       // fse.remove(path.join(rootDirPath, `${file.id}`));
@@ -54,12 +84,10 @@ module.exports.upload = function upload({
       file.ext = '.jpg';
     }
 
-    if (fs.existsSync(cacheDir)) {
-      const cacheData = fs.existsSync(cachePath)
-        ? JSON.parse(fs.readFileSync(cachePath).toString())
-        : false;
+    if (fs.existsSync(cachePath)) {
+      const cacheData = JSON.parse(fs.readFileSync(cachePath).toString());
 
-      if (!cacheData) {
+      if (!cacheData.success) {
         consolelog('[from cache]', 'fail');
         reject(new Error('fail'));
       } else {
@@ -79,6 +107,19 @@ module.exports.upload = function upload({
       return;
     }
 
+    if (!cacheCallback[file.id]) {
+      cacheCallback[file.id] = [];
+    } else if (cacheCallback[file.id]) {
+      cacheCallback[file.id].push((d, e) => {
+        if (e) {
+          reject(e);
+        } else {
+          resolve(d);
+        }
+      });
+      return;
+    }
+
     try {
       process.env.ZHITU_QUALITY = [4 * 20, 3 * 20, 2 * 20, 1 * 20, 0, -15][quality] || 0;
       process.env.ZHITU_TYPECHANGE = type_change;
@@ -88,8 +129,12 @@ module.exports.upload = function upload({
         // 优化失败
         if (info === false) {
           consolelog(chalk.red('fail'));
+          fs.writeFileSync(cachePath, JSON.stringify({
+            success: false,
+          }));
           removeDir();
           reject(new Error('fail'));
+          cacheCallback[file.id].forEach((item) => item({}, new Error('fail')));
           return;
         }
 
@@ -144,15 +189,16 @@ module.exports.upload = function upload({
           clalkColor = 1;
         }
 
-        const clalkLog = chalk[['red', 'yellow', 'green', 'blue', 'magenta'][clalkColor]];
+        const clalkLog = chalk[['red', 'white', 'green', 'blue', 'magenta'][clalkColor]];
         const newFileSize = parseFloat((newFileStat.size / 1024).toFixed(2));
-        const text = clalkColor === 1 ? 'skip' : `[${fileSize}KB => ${newFileSize}KB] [${path.parse(file_path).ext} => ${path.parse(resource).ext}]`;
+        const text = `[${fileSize}KB => ${newFileSize}KB] [${path.parse(file_path).ext} => ${path.parse(resource).ext}]`;
 
         // 缓存配置
         fs.writeFileSync(cachePath, JSON.stringify({
           from_path: newFilePath,
           to_path: resource,
           text,
+          success: true,
         }));
 
         fs.readFile(newFilePath, (err, data) => {
@@ -160,6 +206,10 @@ module.exports.upload = function upload({
             throw new Error(err);
           }
 
+          cacheCallback[file.id].forEach((item) => item({
+            data,
+            resource,
+          }));
           resolve({
             data,
             resource,
@@ -171,7 +221,11 @@ module.exports.upload = function upload({
       });
     } catch (err) {
       consolelog(chalk.red('fail'));
+      fs.writeFileSync(cachePath, JSON.stringify({
+        success: false,
+      }));
       removeDir();
+      cacheCallback[file.id].forEach((item) => item({}, err));
       reject(err);
     }
   });
