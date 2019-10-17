@@ -200,6 +200,11 @@ function Img(path,imgID,buff){
         that.area=that.width*that.height;
         that.extname=paths.extname(that.path).replace(/./,'').replace(/jpeg/,'jpg');/*可见格式，类似png,jpeg*/
         that.basename=paths.basename(that.path,'.'+that.extname);/*文件名不含格式*/
+
+        if (/\.jpeg$/g.test(that.basename)) {
+          that.basename = that.basename.replace(/\.jpeg$/g, '');
+        }
+
         that.has_alpha=false;
         that.getQuality=function(){
             if(that.extname=='jpg' || that.extname=='jpeg' || that.extname=='JPG' || that.extname=='JPEG'){

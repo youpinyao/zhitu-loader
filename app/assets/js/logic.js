@@ -33,7 +33,6 @@ const fs = require('fs');
 
 const Img = require('./img');
 
-var dirName = 'zhitu-des';
 var webpDirName = 'webp';
 var tempDirName = 'temp';
 var tempDirArray = [];
@@ -41,6 +40,10 @@ var isWebp = true;
 var legalImgType = ["png", "jpg", "gif", "bmp", "webp"];
 var isResize = false;
 var replaceFile = false;
+
+function getDirName() {
+  return process.env.ZHITU_DIR || 'zhitu-des';
+}
 function consolelog() {
   // console.log();
   // console.log(...arguments);
@@ -224,14 +227,14 @@ function each(info,buff, callback){
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和image.js中同步*/
 
     if(replaceFile){/*替换原图*/
-        desDir  = desDir_single =path.dirname(info.path)+path.sep;/*最终目录*/
-        webpDir = webpDir_single=path.dirname(info.path)+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir = tempDir_single=path.dirname(info.path)+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir  = desDir_single =process.cwd()+path.sep;/*最终目录*/
+        webpDir = webpDir_single=process.cwd()+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir = tempDir_single=process.cwd()+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        rootDesDir  = desDir_single =path.dirname(info.path)+path.sep+dirName+path.sep;/*最终目录*/
-        desDir  = desDir_single =path.dirname(info.path)+path.sep+dirName+path.sep+info.id+path.sep;/*最终目录*/
-        webpDir = webpDir_single=path.dirname(info.path)+path.sep+dirName+path.sep+info.id+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir = tempDir_single=path.dirname(info.path)+path.sep+dirName+path.sep+info.id+path.sep+tempDirName+path.sep;/*临时目录*/
+        rootDesDir  = desDir_single =process.cwd()+path.sep+getDirName()+path.sep;/*最终目录*/
+        desDir  = desDir_single =process.cwd()+path.sep+getDirName()+path.sep+info.id+path.sep;/*最终目录*/
+        webpDir = webpDir_single=process.cwd()+path.sep+getDirName()+path.sep+info.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir = tempDir_single=process.cwd()+path.sep+getDirName()+path.sep+info.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     if(tempDirArray.indexOf(tempDir_single) < 0){/*临时目录集合*/
         tempDirArray.push(tempDir_single);

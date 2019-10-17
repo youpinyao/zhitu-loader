@@ -14,7 +14,6 @@ const {
 } = require('./function');
 
 var replaceFile = false;
-var dirName = 'zhitu-des';
 var webpDirName = 'webp';
 var tempDirName = 'temp';
 var tempDirArray = [];
@@ -22,6 +21,10 @@ var isWebp = true;
 var legalImgType = ["png", "jpg", "gif", "bmp", "webp"];
 var isResize = false;
 var replaceFile = false;
+
+function getDirName() {
+  return process.env.ZHITU_DIR || 'zhitu-des';
+}
 
 function consolelog() {
   // console.log(...arguments);
@@ -165,13 +168,13 @@ function pngDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
         webpDir,
         tempDir;
     if(replaceFile){/*替换原图*/
-        desDir =path.dirname(e.path)+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =process.cwd()+path.sep;/*最终目录*/
+        webpDir=process.cwd()+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=process.cwd()+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir =path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep;/*最终目录*/
+        webpDir=process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
 
@@ -508,13 +511,13 @@ function jpgDeal_With_TypeChange(e,buff,tempPath,desPath,cb){
         webpDir,
         tempDir;
     if(replaceFile){/*替换原图*/
-        desDir =path.dirname(e.path)+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =process.cwd()+path.sep;/*最终目录*/
+        webpDir=process.cwd()+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=process.cwd()+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir =path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep;/*最终目录*/
+        webpDir=process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
 
@@ -643,13 +646,13 @@ function gifDeal(e,buff,tempPath,desPath,cb){
         webpDir,
         tempDir;
     if(replaceFile){/*替换原图*/
-        desDir =path.dirname(e.path)+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =process.cwd()+path.sep;/*最终目录*/
+        webpDir=process.cwd()+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=process.cwd()+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir =path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep;/*最终目录*/
+        webpDir=process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
 
@@ -688,13 +691,13 @@ function png8Deal(e,buff,tempPath,desPath,cb){
         webpDir,
         tempDir;
     if(replaceFile){/*替换原图*/
-        desDir =path.dirname(e.path)+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =process.cwd()+path.sep;/*最终目录*/
+        webpDir=process.cwd()+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=process.cwd()+path.sep+tempDirName+path.sep;/*临时目录*/
     }else{/*生成目标目录*/
-        desDir =path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep;/*最终目录*/
-        webpDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
-        tempDir=path.dirname(e.path)+path.sep+dirName+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
+        desDir =process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep;/*最终目录*/
+        webpDir=process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep+webpDirName+path.sep;/*最终目录*/
+        tempDir=process.cwd()+path.sep+getDirName()+path.sep+e.id+path.sep+tempDirName+path.sep;/*临时目录*/
     }
     /*本来这里可以不用重新设置，不过为了每张图片保持独立，和logic.js中同步*/
 

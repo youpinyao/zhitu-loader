@@ -3,10 +3,18 @@ const loaderUtils = require('loader-utils');
 
 const zhitu = require('./zhitu');
 
+let count = 0;
+
 module.exports = function loader(source) {
-  this.cacheable(false);
+  this.cacheable(true);
   const callback = this.async();
   const file_path = this.resource;
+
+  count += 1;
+
+  if (count === 1) {
+    console.log();
+  }
 
   zhitu.upload({
     file_path,
