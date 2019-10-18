@@ -1,5 +1,11 @@
 # 腾讯智图 webpack loader
 
+## 安装
+
+```node
+npm i zhitu-loader -D
+```
+
 ## ImageMagick
 
 ```node
@@ -8,9 +14,8 @@ https://imagemagick.org/script/download.php
 ```
 
 ## 配置
-```node
-npm i zhitu-loader -D
 
+```node
 {
   test: /\.(jpeg|jpg|png|gif)$/,
   exclude: /(node_modules)/,
