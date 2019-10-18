@@ -6,7 +6,7 @@ const hasha = require('hasha');
 const fse = require('fs-extra');
 
 const logicEach = require('../app/assets/js/logic').each;
-
+11123
 const cacheCallback = {};
 
 module.exports.upload = function upload(options) {
