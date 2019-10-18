@@ -6,10 +6,11 @@
 npm i zhitu-loader -D
 ```
 
-## ImageMagick
+## 依赖
+
+### ImageMagick
 
 ```node
-需先安装
 https://imagemagick.org/script/download.php
 ```
 
