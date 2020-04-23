@@ -12,6 +12,8 @@ npm i zhitu-loader -D
 
 ```node
 https://imagemagick.org/script/download.php
+
+IOS 解压到 /opt/ImageMagick/
 ```
 
 ## 配置
